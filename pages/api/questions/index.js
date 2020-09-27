@@ -15,6 +15,7 @@ export default async (req, res) => {
             questionsArr.reverse()
             res.status(200).json(questionsArr);
         })
+
     } catch (error) {
         console.error(error);
         res.status(error.status || 500).json({

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios'
+import { Question } from 'components'
 
 export default function Dashboard({ user }) {
     const [questions, setQuestions] = useState([]);
@@ -20,7 +21,7 @@ export default function Dashboard({ user }) {
     return (
         <>
             <div>{`user dashboard: ${user.name}`}</div>
-            { questions.map(question => <h3>{question.name}</h3>)}
+            { questions.map(question => <Question key={question.id} enableEdit={false} data={question} />)}
         </>
     );
 }

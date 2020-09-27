@@ -4,7 +4,6 @@ const firebaseDB = firebase.database();
 
 export default async (req, res) => {
     try {
-        const { name, company, question } = req.body;
 
         //Add auth0
         const session = await auth0.getSession(req);
@@ -19,17 +18,18 @@ export default async (req, res) => {
         const { user } = session
         const { name:username } = user
 
-        //Agrego document en la collection de questions (usando firebase con async/await)
-        const responseKey = await firebaseDB.ref('questions').push({
-            username,
-            name,
-            company,
-            question,
-            highlight: false
-        }).getKey()
-
-        //Devuelvo el usuario recien creado
-        res.status(200).json({"status":"added", "id": responseKey, username, name, company, question });
+        //Datos filtrados por username. Se tiene que usar orderByChild para elegir el campo y equalTo para comparalo
+        firebaseDB.ref('questions').orderByChild('username').equalTo(username).once('value', (snapshot) => {
+            const questionsArr = [];
+            snapshot.forEach((childSnapshot) => {
+                questionsArr.push({
+                    id: childSnapshot.key,
+                    ...childSnapshot.val()
+                })
+            })
+            questionsArr.reverse()
+            res.status(200).json(questionsArr);
+        })
 
     } catch (error) {
         console.error(error);

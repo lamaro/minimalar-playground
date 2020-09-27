@@ -3,12 +3,19 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import axios from 'axios';
 import { Container } from './styles'
 
-const QuestionForm = () => {
+const QuestionForm = ({ editForm = false, editFormData = {}, handleEditEnd }) => {
     const [message, setMessage] = useState('');
     return (
         <Container>
             <Formik
-                initialValues={{ name: '', company: '', question: '' }}
+                initialValues={
+                    {
+                        name: editForm ? editFormData.name : '',
+                        company: editForm ? editFormData.company : '',
+                        question: editForm ? editFormData.question : ''
+                    }
+                }
+                enableReinitialize={true}
                 validate={values => {
                     const errors = {};
                     if (!values.name) {
@@ -25,10 +32,17 @@ const QuestionForm = () => {
                 onSubmit={
                     async (values, { setSubmitting }) => {
                         try {
-                            const res = await axios.post('/api/questions/add', values)
+                            //Chequeo si la accion del form es para editar o crear
+                            const formAction = editForm ? 'edit' : 'add'
+                            const formValues = !editForm ? values : {'id':editFormData.id, ...values}
+
+                            const res = await axios.post(`/api/questions/${formAction}`, formValues)
                             const data = await res.data
                             setSubmitting(false);
                             setMessage(`Question sent, thanks ${data.name} (${res.status})`)
+
+                            //Le aviso al componente padre que terminó de editar. (mejorar)
+                            handleEditEnd(true)
                         } catch (error) {
                             if (error.response) {
                                 /*
