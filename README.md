@@ -9,3 +9,4 @@
 - DELETE (error data, usando POST)
 - UPDATE -> OK
 - UPLOADS IMAGES TO FIRESTORE -> Pendiente. Ejemplo https://dev.to/itnext/how-to-do-image-upload-with-firebase-in-react-cpj
+- PAGINA SINGLE DE QUESTION -> OK (Falta diseño)

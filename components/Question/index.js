@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Container as QuestionContainer } from './styles'
 import axios from 'axios';
+import Link from 'next/link'    
 
 const Question = ({ data, enableEdit, handleEdit }) => {
     const [toDelete, setToDelete] = useState(null)
@@ -23,7 +24,9 @@ const Question = ({ data, enableEdit, handleEdit }) => {
             highlight={highlight}
         >
             <div className="question_content">
-                <h2>{question}</h2>
+                <Link href={`/questions/${id}`}>
+                    <a><h2>{question}</h2></a>
+                </Link>
                 <p>{name} - <span>{company}</span> - {username}</p>
             </div>
             { enableEdit &&
