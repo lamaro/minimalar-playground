@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios'
 
-export default function Dashboard({ user, loading = false }) {
-    const [clients, setClients] = useState([]);
+export default function Dashboard({ user }) {
+    const [questions, setQuestions] = useState([]);
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const { data } = await axios.get(
-                    "/api/clients"
+                    "/api/questions"
                 );
-                setClients(data);
+                setQuestions(data);
             } catch (error) {
                 console.error("este es mi error", error);
             }
@@ -20,7 +20,7 @@ export default function Dashboard({ user, loading = false }) {
     return (
         <>
             <div>{`user dashboard: ${user.name}`}</div>
-            { clients.map(client => <h3>{client.name}</h3>)}
+            { questions.map(question => <h3>{question.name}</h3>)}
         </>
     );
 }

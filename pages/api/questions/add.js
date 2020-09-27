@@ -18,12 +18,13 @@ export default async (req, res) => {
 
         //Agrego registro en la collection de questions
         const responseKey = await firebaseDB.ref('questions').push({
+            //user,
             name,
             company,
             question,
             highlight: false
         }).getKey()
-        res.status(200).json({ 'id': responseKey, name, company, question });
+        res.status(200).json({"status":"added", "id": responseKey, name, company, question });
 
     } catch (error) {
         console.error(error);
